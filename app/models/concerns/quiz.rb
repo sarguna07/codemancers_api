@@ -1,4 +1,5 @@
 class Quiz < ApplicationRecord
+  belongs_to :quiz_group
   validates :question, :answer, presence: true
   validates :option_one, :option_two, :option_three, :option_four, presence: true
 

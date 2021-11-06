@@ -8,6 +8,13 @@ class CreateQuiz < ActiveRecord::Migration[5.2]
       t.string :option_four
       t.string :answer
       t.integer :status
+      t.uuid :quiz_group_id
+      t.timestamps
+    end
+
+    create_table :quiz_groups, id: :uuid do |t|
+      t.string :name
+      t.integer :status
       t.timestamps
     end
   end
