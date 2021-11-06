@@ -3,6 +3,9 @@ module ExceptionHandler
 
   included do
     rescue_from StandardError, with: :internal_server_error
+    rescue_from ArgumentError,
+                InvalidParams,
+                ActionController::ParameterMissing, with: :invalid_params
     rescue_from ActiveRecord::RecordInvalid, with: :invalid_record
     rescue_from Unauthorized, with: :unauthorized
   end
@@ -33,5 +36,13 @@ module ExceptionHandler
       status: false,
       message: 'Internal Server Error'
     }, status: :internal_server_error
+  end
+
+  def invalid_params(exception)
+    render json: {
+      status: false,
+      message: 'Invalid data',
+      data: [exception.message]
+    }, status: :unprocessable_entity
   end
 end
