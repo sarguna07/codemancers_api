@@ -28,11 +28,17 @@ module Api
 
     def submit
       mark = 0
+      group = ''
       params[:quiz].map do |ans|
         find_question = Quiz.active.find_by(id: ans['id'], answer: ans['answer'])
+        group = find_question.quiz_group
         mark += 1 if find_question
       end
-      percentage = ((mark.to_f / Quiz.active.count.to_f) * 100)
+      percentage = if group.present?
+                     ((mark.to_f / group.quizzes.active.count.to_f) * 100)
+                   else
+                     0
+                   end
       render json: {
         status: true,
         message: 'Submitted Succesfully..!',
