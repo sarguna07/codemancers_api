@@ -31,8 +31,10 @@ module Api
       group = ''
       params[:quiz].map do |ans|
         find_question = Quiz.active.find_by(id: ans['id'], answer: ans['answer'])
-        group = find_question.quiz_group
-        mark += 1 if find_question
+        if find_question
+          group = find_question.quiz_group
+          mark += 1 if find_question
+        end
       end
       percentage = if group.present?
                      ((mark.to_f / group.quizzes.active.count.to_f) * 100)
